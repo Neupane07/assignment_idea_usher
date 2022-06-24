@@ -14,7 +14,7 @@ const s3 = new S3({
 // fn to download file from s3 bucket
 const getImage = (imageKey) => {
   const downloadParams = {
-    Key: `public/${imageKey}`,
+    Key: `${imageKey}`,
     Bucket: bucketName,
   };
 
