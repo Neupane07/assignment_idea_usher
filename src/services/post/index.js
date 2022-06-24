@@ -23,13 +23,11 @@ exports.addPost = async (req = {}) => {
   const imageUrl =
     req.protocol + "://" + req.get("host") + "/images/" + req.file.filename;
 
-  console.log(imageUrl);
-
   return POST.create({
     title,
     description,
     _tag,
-    image: req.file.path,
+    image: imageUrl,
   });
 };
 

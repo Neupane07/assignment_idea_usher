@@ -57,11 +57,8 @@ router
       });
   })
   .post(upload.single("file"), addValidatePost, (req, res) => {
-    console.log(req.body);
-    console.log(req.file);
     addPost(req)
       .then(async (data) => {
-        console.log("data", data);
         res
           .status(200)
           .send({ status: true, message: "Added Successfuly", data: null });

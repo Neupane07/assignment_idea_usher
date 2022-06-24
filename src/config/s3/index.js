@@ -5,29 +5,23 @@ const bucketRegion = process.env.AWS_BUCKET_REGION;
 const accessKeyId = process.env.AWS_ACCESS_KEY;
 const secretAccessKey = process.env.AWS_SECRET_KEY;
 
-console.log('bucketname', bucketName)
-console.log('bucketname', accessKeyId)
-console.log('bucketname', secretAccessKey)
-
 const s3 = new S3({
   bucketRegion,
   accessKeyId,
   secretAccessKey,
 });
 
-
-// fn to upload file to s3 bucket
-
+// fn to download file from s3 bucket
 const getImage = (imageKey) => {
   const downloadParams = {
     Key: `public/${imageKey}`,
     Bucket: bucketName,
   };
-  
+
   return s3.getObject(downloadParams).createReadStream();
-}
+};
 
 module.exports = {
   s3,
-  getImage
-}
+  getImage,
+};

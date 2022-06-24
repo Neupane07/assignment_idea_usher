@@ -3,7 +3,7 @@ const { Schema, model, Types } = require("mongoose");
 const tagSchema = new Schema(
   {
     name: {
-      type: String,
+      type: Types.ObjectId,
     },
     isDeleted: {
       type: Boolean,

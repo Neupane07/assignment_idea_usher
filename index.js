@@ -6,33 +6,16 @@ const { errorHandler } = require("./src/middleware/error");
 const route = require("./src/routes/post");
 connectDB();
 const PORT = process.env.PORT || 8000;
-// const multer = require("multer");
-
-// let storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "./public");
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, file.fieldname + "-" + Date.now());
-//   },
-// });
-
-// let upload = multer({ storage: storage });
 
 const app = express();
 app.use(express.json());
 
-
-app.get('/images/:key', function(req, res) {
-  console.log(getImage)
+app.get("/images/:key", function (req, res) {
   const key = req.params.key;
-  console.log(key);
-
   const readStream = getImage(key);
 
-
   readStream.pipe(res);
-})
+});
 
 app.use("/api", route);
 
