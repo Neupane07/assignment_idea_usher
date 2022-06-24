@@ -11,6 +11,19 @@ const {
   deleteValidatePost,
   putValidatePost,
 } = require("../../middleware/validation/post");
+const multer = require("multer");
+const { getImage } = require("../../config/s3");
+
+let storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./public");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "-" + Date.now());
+  },
+});
+
+let upload = multer({ storage: storage });
 
 const router = require("express").Router();
 router
@@ -43,9 +56,12 @@ router
         res.status(400).send({ status: false, message: error.message });
       });
   })
-  .post(addValidatePost, (req, res) => {
-    addPost(req.body)
+  .post(upload.single("file"), addValidatePost, (req, res) => {
+    console.log(req.body);
+    console.log(req.file);
+    addPost(req)
       .then(async (data) => {
+        console.log("data", data);
         res
           .status(200)
           .send({ status: true, message: "Added Successfuly", data: null });

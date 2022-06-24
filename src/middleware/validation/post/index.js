@@ -17,8 +17,7 @@ exports.addValidatePost = (req, res, next) => {
     .keys({
       title: Joi.string().required(),
       description: Joi.string().optional(),
-      image: Joi.string().optional(),
-      _tag: Joi.array().items().required(),
+      _tag: Joi.string().required(),
     })
     .validate(req.body);
 

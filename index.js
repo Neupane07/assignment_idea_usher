@@ -1,30 +1,39 @@
 const express = require("express");
-const dotenv = require("dotenv").config();
+require("dotenv").config();
 const connectDB = require("./src/config/db");
+const { getImage } = require("./src/config/s3/index.js");
 const { errorHandler } = require("./src/middleware/error");
 const route = require("./src/routes/post");
 connectDB();
-const multer = require("multer");
-const multerS3 = require("multer-s3");
-const uuid = require("uuid").v4;
-const path = require("path");
-const s3 = require("./src/config/s3");
-
-const upload = multer({
-  storage: multerS3({
-    s3,
-    bucket: process.env.AWS_BUCKET_NAME,
-    key: (req, file, cb) => {
-      const ext = path.extname(file.originalname);
-      cb(null, `${uuid()}${ext}`)
-    } 
-  }),
-});
 const PORT = process.env.PORT || 8000;
+// const multer = require("multer");
+
+// let storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "./public");
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, file.fieldname + "-" + Date.now());
+//   },
+// });
+
+// let upload = multer({ storage: storage });
 
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+
+app.get('/images/:key', function(req, res) {
+  console.log(getImage)
+  const key = req.params.key;
+  console.log(key);
+
+  const readStream = getImage(key);
+
+
+  readStream.pipe(res);
+})
+
 app.use("/api", route);
 
 app.use(errorHandler);

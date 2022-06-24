@@ -1,6 +1,37 @@
 const POST = require("../../models/post");
+const fs = require("fs");
+const util = require("util");
+const { s3 } = require("../../config/s3");
 
-exports.addPost = async (payload = {}) => POST.create(payload);
+const unlinkFile = util.promisify(fs.unlink);
+
+exports.addPost = async (req = {}) => {
+  const { title, description, _tag } = req.body;
+  const blob = fs.readFileSync(req.file.path);
+
+  await s3
+    .upload({
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: req.file.path,
+      Body: blob,
+      ACL: "private",
+    })
+    .promise();
+
+  await unlinkFile(req.file.path);
+
+  const imageUrl =
+    req.protocol + "://" + req.get("host") + "/images/" + req.file.filename;
+
+  console.log(imageUrl);
+
+  return POST.create({
+    title,
+    description,
+    _tag,
+    image: req.file.path,
+  });
+};
 
 exports.getPosts = async (search = {}, skip, limit) =>
   POST.find(search)

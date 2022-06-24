@@ -7,7 +7,7 @@ const postSchema = new Schema(
     image: String,
     _tag: [
       {
-        type: Types.ObjectId,
+        type: String,
         ref: "Tag",
       },
     ],
