@@ -13,28 +13,30 @@ exports.getValidatePost = (req, res, next) => {
 };
 
 exports.addValidatePost = (req, res, next) => {
+  let tag = JSON.parse(req.body._tag);
   let { error } = Joi.object()
     .keys({
       title: Joi.string().required(),
       description: Joi.string().optional(),
-      _tag: Joi.string().required(),
+      _tag: Joi.array().items(Joi.string().hex()).required(),
     })
-    .validate(req.body);
+    .validate({ ...req.body, _tag: tag });
 
   if (error) return errorM(res, error.details[0].message);
   next();
 };
 
 exports.putValidatePost = (req, res, next) => {
+  let tag = JSON.parse(req.body._tag);
   let { error } = Joi.object()
     .keys({
       postId: Joi.string().hex().required(),
       title: Joi.string().optional(),
       description: Joi.string().optional(),
       image: Joi.string().optional(),
-      _tag: Joi.array().items().required(),
+      _tag: Joi.array().items(Joi.string().hex()).required(),
     })
-    .validate(req.body);
+    .validate({ ...req.body, _tag: tag });
 
   if (error) return errorM(res, error.details[0].message);
   next();

@@ -57,7 +57,7 @@ router
       });
   })
   .post(upload.single("file"), addValidatePost, (req, res) => {
-    addPost(req)
+    addPost(req.body, req)
       .then(async (data) => {
         res
           .status(200)

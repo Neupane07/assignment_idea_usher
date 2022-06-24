@@ -5,8 +5,9 @@ const { s3 } = require("../../config/s3");
 
 const unlinkFile = util.promisify(fs.unlink);
 
-exports.addPost = async (req = {}) => {
-  const { title, description, _tag } = req.body;
+exports.addPost = async (postData = {}, req = {}) => {
+  let { title, description, _tag } = postData;
+  _tag = JSON.parse(_tag);
   const blob = fs.readFileSync(req.file.path);
 
   await s3
