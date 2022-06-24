@@ -12,12 +12,13 @@ exports.addPost = async (postData = {}, req = {}) => {
 
   console.log('********************', req.file)
 
+  const key = Date.now().toString();
   const blob = fs.readFileSync(req.file.path);
 
   await s3
     .upload({
       Bucket: process.env.AWS_BUCKET_NAME,
-      Key: req.file.path,
+      Key: key,
       Body: blob,
       ACL: "private",
     })
@@ -26,7 +27,7 @@ exports.addPost = async (postData = {}, req = {}) => {
   await unlinkFile(req.file.path);
 
   const imageUrl =
-    req.protocol + "://" + req.get("host") + "/images/" + req.file.filename;
+    req.protocol + "://" + req.get("host") + "/images/" + key;
 
   return POST.create({
     title,
