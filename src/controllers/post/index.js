@@ -16,7 +16,7 @@ const { getImage } = require("../../config/s3");
 
 let storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./public");
+    cb(null, process.cwd()+"/public");
   },
   filename: (req, file, cb) => {
     cb(null, file.fieldname + "-" + Date.now());
