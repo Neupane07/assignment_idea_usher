@@ -8,6 +8,10 @@ const unlinkFile = util.promisify(fs.unlink);
 exports.addPost = async (postData = {}, req = {}) => {
   let { title, description, _tag } = postData;
   _tag = JSON.parse(_tag);
+
+
+  console.log('********************', req.file)
+
   const blob = fs.readFileSync(req.file.path);
 
   await s3

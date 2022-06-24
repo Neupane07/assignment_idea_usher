@@ -23,7 +23,7 @@ let storage = multer.diskStorage({
   },
 });
 
-let upload = multer({ storage: storage });
+let upload = multer({ storage: storage, limits: { fieldSize: 10 * 1024 * 1024 } });
 
 const router = require("express").Router();
 router
